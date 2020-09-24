@@ -1,0 +1,7 @@
+---
+title: "p8105_hw2_kpr2118"
+author: "Kailey Rishovd"
+date: "9/30/2020"
+output: github_document
+---
+
