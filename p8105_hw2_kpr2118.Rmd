@@ -84,17 +84,17 @@ This dataset contains information from the Mr. Trashwheel trash collector in Bal
 
 ## Problem 2
 
-Read the NYC Transit dataset. 
+Read the NYC Transit dataset and begin to clean. 
 
 ```{r}
 transit_df = 
   read_csv("./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>% 
   janitor::clean_names() %>% 
   select(line:entry, vending, ada) %>% 
-  mutate(entry = recode(entry, YES = "TRUE", NO = "FALSE"))
+  mutate(entry = recode(entry, YES = "TRUE", NO = "FALSE")) 
 ```
 
-This dataset contains information from the NYC Transit Subway Entrance and Exit data. It has information on each line including stations, station locations, routes served, entrance type, entrance availability, vending availability, and ada compliance. There are a total of `r nrow(transit_df)` rows and `r ncol(transit_df)` columns in this dataset. So far, I have cleaned up names, selected variables of interest, and converted the 'entry' variable from character into a logical variable. The data are relatively tidy but there could be more done to make it even more so... possibilities include organizing the arrangement of information. In this dataset: 
+This dataset contains information from the NYC Transit Subway Entrance and Exit data. It has information on each line including stations, station locations, routes served, entrance type, entrance availability, vending availability, and ada compliance. There are a total of `r nrow(transit_df)` rows and `r ncol(transit_df)` columns in this dataset. So far, I have cleaned up names, selected variables of interest, and converted the 'entry' variable from character into a logical variable. The data are relatively tidy but there could be more done to make it even more so... possibilities include organizing the arrangement of information or making some variables more distinct. In this dataset: 
 
 - There are `r filter(transit_df) %>% select (line, station_name) %>%  distinct(line, station_name) %>% nrow()` distinct stations. 
 
@@ -102,6 +102,21 @@ This dataset contains information from the NYC Transit Subway Entrance and Exit 
 
 - `r filter(transit_df, vending == "NO", entry == "TRUE") %>% select (line, station_name, vending, entry) %>% distinct (line, station_name) %>% nrow()` station entrances/exits without vending allow entrance 
 
+Now I will reformat route number and route name into distinct variables. 
+
+```{r}
+transit_df = 
+  transit_df %>% 
+  mutate_at(vars(route1:route11), as.character) %>% 
+  pivot_longer(
+    route1:route11, 
+    names_to = "route_number",
+    names_prefix = "route",
+    values_to = "route_name",
+  ) %>% 
+  drop_na(route_name) %>% 
+  relocate(line:station_longitude, route_name, route_number, entrance_type:ada)
+```
 
 
 
