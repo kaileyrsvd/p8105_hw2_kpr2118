@@ -200,6 +200,14 @@ unemployment_df =
   mutate(month = recode(month, "jan" = "January", "feb" = "February", "mar" = "March", "apr" = "April", "may" = "May", "jun" = "June", "jul" = "July", "aug" = "August", "sep" = "September", "oct" = "October", "nov" = "November", "dec" = "December"))
 ```
 
+Now that all the datasets of interest are cleaned up, we can merge as desired... 
+
+```{r Merge pols snp and unemployment datasets} 
+polssnp_df = 
+  left_join(pols_df, snp_df, by = c("year", "month"))
+```
+
+
 
 
 
