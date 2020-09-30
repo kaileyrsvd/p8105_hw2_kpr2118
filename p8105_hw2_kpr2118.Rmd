@@ -166,3 +166,35 @@ pols_df =
   select(year, month, president, gov_gop:rep_gop, gov_dem:rep_dem)
 ```
 
+```{r}
+snp_df = 
+  read_csv("./data/fivethirtyeight_datasets/snp.csv") %>% 
+  separate(date, into = c("month", "day", "year")) %>% 
+  mutate_at(vars(month:year), as.integer) 
+
+snpmonth_df = 
+    tibble(
+      month = 1:12,
+      month_name = month.name
+    )
+
+snp_df =  
+    left_join(snp_df, snpmonth_df, by = "month") 
+
+snp_df = 
+  snp_df %>%  
+  select(-month) %>% 
+  select(year, month = "month_name", close)
+```
+
+
+
+
+
+
+
+
+
+
+
+
