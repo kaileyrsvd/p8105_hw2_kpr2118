@@ -210,11 +210,9 @@ final_df =
   left_join(polssnp_df, unemployment_df, by = c("year", "month"))
 ```
 
+The data pulled from FiveThirtyEight are the "pols-month", "snp", and "unemployment" files. "Pols-month" contains information on the history of national politicians, indicating democratic and republican presidents, governors, senators, and representatives, at the given times. "Snp" includes the closing values of Standard & Poor's stock market index at various dates of observation. The "unemployment" file indicates the percentage of unemployment at given points in history (month and year). From these datasets, after tidying up, I was able to merge pols-month data with snp data, and then, from that merged datset, merge with the unemployment data of interest. The "final_df" dataset includes information from all 3 files to show the intersection of politics, the stock market, and unemployment. 
 
-
-
-
-
+The final dataset has a total of `r nrow(final_df)` rows and `r ncol(final_df)` columns. Information includes data for the range of years from 1947 - 2015 and key variables are year, month, president (democrat or republican in office), close (the closing value of S&P stock index), and precent_unemp (the percentage unemployed at that time). 
 
 
 
