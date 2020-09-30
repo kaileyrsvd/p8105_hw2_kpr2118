@@ -106,7 +106,7 @@ This dataset contains information from the NYC Transit Subway Entrance and Exit 
 
 - `r filter(transit_df, ada == "TRUE") %>% select (line, station_name, ada) %>% distinct (line, station_name) %>% nrow()` stations are ADA compliant. 
 
-- `r filter(transit_df, vending == "NO", entry == "TRUE") %>% select (line, station_name, vending, entry) %>% distinct (line, station_name) %>% nrow()` station entrances/exits without vending allow entrance 
+- `r filter(transit_df, vending == "NO") %>%  count()` entrance/exists do not have vending and `r filter(transit_df, vending == "NO" & entry == "TRUE") %>%  count()` allow entry ... therefore, `r 69/183 * 100` percent of station entrances/exits without vending allow entrance. 
 
 Now I will reformat route number and route name into distinct variables. 
 
@@ -196,8 +196,7 @@ unemployment_df =
     jan:dec, 
     names_to = "month", 
     values_to = "percent_unemp"
-  ) %>% 
-  mutate(month = recode(month, "jan" = "January", "feb" = "February", "mar" = "March", "apr" = "April", "may" = "May", "jun" = "June", "jul" = "July", "aug" = "August", "sep" = "September", "oct" = "October", "nov" = "November", "dec" = "December"))
+  )
 ```
 
 Now that all the datasets of interest are cleaned up, we can merge as desired... 
@@ -205,6 +204,9 @@ Now that all the datasets of interest are cleaned up, we can merge as desired...
 ```{r Merge pols snp and unemployment datasets} 
 polssnp_df = 
   left_join(pols_df, snp_df, by = c("year", "month"))
+
+final_df = 
+  left_join(polssnp_df, unemployment_df, by = c("year", "month"))
 ```
 
 
