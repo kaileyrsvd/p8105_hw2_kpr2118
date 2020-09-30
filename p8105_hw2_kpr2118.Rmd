@@ -121,7 +121,7 @@ transit_df =
 
 - `r filter(transit_df, route_name =="A") %>% select(route_name, line, station_name) %>% distinct(line, station_name) %>% nrow()` distinct stations serve the A train
 
-- Of the stations that serve the A train, are ADA compliant. 
+- Of the stations that serve the A train, `r filter(transit_df, route_name == "A", ada == "TRUE") %>% select(route_name, line, station_name, ada) %>% distinct (line, station_name) %>% nrow()` are ADA compliant. 
 
 
 
