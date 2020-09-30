@@ -74,6 +74,11 @@ precip_df =
 
 precip_df = 
   left_join(precip_df, month_df, by = "month") 
+
+precip_df = 
+  precip_df %>% 
+  select(-month) %>% 
+  select(year, month = "month_name", total)
 ```
 
 This dataset contains information from the Mr. Trashwheel trash collector in Baltimore, Maryland. As trash enters the inner harbor, the trashwheel collects that trash, and stores it in a dumpster. The dataset contains information on year, month, and trash collected, including some specific kinds of trash.There are a total of `r nrow(trashwheel_df)` rows in our final dataset. Additional data sheets include monthly precipitation data. In this dataset: 
@@ -119,12 +124,35 @@ transit_df =
   relocate(line:station_longitude, route_name, route_number, entrance_type:ada)
 ```
 
+Now we can read things such as...
+
 - `r filter(transit_df, route_name =="A") %>% select(route_name, line, station_name) %>% distinct(line, station_name) %>% nrow()` distinct stations serve the A train
 
 - Of the stations that serve the A train, `r filter(transit_df, route_name == "A", ada == "TRUE") %>% select(route_name, line, station_name, ada) %>% distinct (line, station_name) %>% nrow()` are ADA compliant. 
 
+## Problem 3
 
+Read in and clean selected FiveThirtyEight datasets...
 
+```{r}
+pols_df = 
+  read_csv("./data/fivethirtyeight_datasets/pols-month.csv") %>% 
+  separate(mon, into = c("year", "month", "day")) %>% 
+  mutate_at(vars(year:day), as.integer)   
 
+polsmonth_df =
+    tibble(
+      month = 1:12,
+      month_name = month.name
+    )
 
+pols_df = 
+    left_join(pols_df, polsmonth_df, by = "month")  
 
+pols_df = 
+  pols_df %>% 
+  select(-month) %>% 
+  select(year, month = "month_name", day:rep_dem)
+```
+
+First, clean the data in pols-month.csv. Use separate() to break up the variable mon into integer variables year, month, and day; replace month number with month name; create a president variable taking values gop and dem, and remove prez_dem and prez_gop; and remove the day variable.
