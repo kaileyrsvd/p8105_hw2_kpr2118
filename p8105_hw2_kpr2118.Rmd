@@ -91,10 +91,16 @@ transit_df =
   read_csv("./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>% 
   janitor::clean_names() %>% 
   select(line:entry, vending, ada) %>% 
-  mutate(entry=recode(entry, YES = "TRUE", NO = "FALSE"))
+  mutate(entry = recode(entry, YES = "TRUE", NO = "FALSE"))
 ```
 
+This dataset contains information from the NYC Transit Subway Entrance and Exit data. It has information on each line including stations, station locations, routes served, entrance type, entrance availability, vending availability, and ada compliance. There are a total of `r nrow(transit_df)` rows and `r ncol(transit_df)` columns in this dataset. So far, I have cleaned up names, selected variables of interest, and converted the 'entry' variable from character into a logical variable. The data are relatively tidy but there could be more done to make it even more so... possibilities include organizing the arrangement of information. In this dataset: 
 
+- There are `r filter(transit_df) %>% select (line, station_name) %>%  distinct(line, station_name) %>% nrow()` distinct stations. 
+
+- `r filter(transit_df, ada == "TRUE") %>% select (line, station_name, ada) %>% distinct (line, station_name) %>% nrow()` stations are ADA compliant. 
+
+- `r filter(transit_df, vending == "NO", entry == "TRUE") %>% select (line, station_name, vending, entry) %>% distinct (line, station_name) %>% nrow()` station entrances/exits without vending allow entrance 
 
 
 
