@@ -166,7 +166,7 @@ pols_df =
   select(year, month, president, gov_gop:rep_gop, gov_dem:rep_dem)
 ```
 
-```{read in snp data and clean}
+```{r read in snp data and clean}
 snp_df = 
   read_csv("./data/fivethirtyeight_datasets/snp.csv") %>% 
   separate(date, into = c("month", "day", "year")) %>% 
@@ -187,7 +187,7 @@ snp_df =
   select(year, month = "month_name", close)
 ```
 
-```{read in unemployment data and clean}
+```{r read in unemployment data and clean}
 unemployment_df = 
   read_csv("./data/fivethirtyeight_datasets/unemployment.csv") %>% 
   janitor::clean_names() %>% 
@@ -196,9 +196,7 @@ unemployment_df =
     jan:dec, 
     names_to = "month", 
     values_to = "percent_unemp"
-  ) %>% 
-  mutate(month = as.integer(month)
-         month = month.abb[month])
+  )
 ```
 
 
