@@ -20,7 +20,7 @@ path_to_trash_data = "./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx"
 
 Read the Mr. Trashwheel dataset. 
 
-```{r}
+```{r Read in trash data and clean}
 trashwheel_df = 
   read_xlsx(
     path = path_to_trash_data,
@@ -36,7 +36,7 @@ trashwheel_df =
 
 Read precipitation data for 2018 and 2017! 
 
-```{r}
+```{r Percipitation data read and clean}
 precip_2018 = 
   read_excel(
     "./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
@@ -62,7 +62,7 @@ precip_2017 =
 
 Now combine annual precipitation. Made 'helper' tibble for numeric and character representation of month, then merge with month number key, with the precipitation dataset. 
 
-```{r}
+```{r Combine}
 month_df = 
   tibble(
     month = 1:12, 
@@ -91,7 +91,7 @@ This dataset contains information from the Mr. Trashwheel trash collector in Bal
 
 Read the NYC Transit dataset and begin to clean. 
 
-```{r}
+```{r Read in transit data and clean}
 transit_df = 
   read_csv("./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>% 
   janitor::clean_names() %>% 
@@ -100,7 +100,7 @@ transit_df =
   mutate(entry = as.logical(entry))
 ```
 
-This dataset contains information from the NYC Transit Subway Entrance and Exit data. It has information on each line including stations, station locations, routes served, entrance type, entrance availability, vending availability, and ada compliance. There are a total of `r nrow(transit_df)` rows and `r ncol(transit_df)` columns in this dataset. So far, I have cleaned up names, selected variables of interest, and converted the 'entry' variable from character into a logical variable. The data are relatively tidy but there could be more done to make it even more so... possibilities include organizing the arrangement of information or making some variables more distinct. In this dataset: 
+This dataset contains information from the NYC Transit Subway Entrance and Exit data. It has information on each line including stations, station locations, routes served, entrance type, entrance availability, vending availablity, and ada compliance. There are a total of `r nrow(transit_df)` rows and `r ncol(transit_df)` columns in this dataset. So far, I have cleaned up names, selected variables of interest, and converted the 'entry' variable from character into a logical variable. The data are relatively tidy but there could be more done to make it even more so... possibilities include organizing the arrangement of information or making some variables more distinct. In this dataset: 
 
 - There are `r filter(transit_df) %>% select (line, station_name) %>%  distinct(line, station_name) %>% nrow()` distinct stations. 
 
@@ -110,7 +110,7 @@ This dataset contains information from the NYC Transit Subway Entrance and Exit 
 
 Now I will reformat route number and route name into distinct variables. 
 
-```{r}
+```{r Reformat for distinction in route}
 transit_df = 
   transit_df %>% 
   mutate_at(vars(route1:route11), as.character) %>% 
@@ -134,7 +134,7 @@ Now we can read things such as...
 
 Read in and clean selected FiveThirtyEight datasets...
 
-```{r}
+```{r Read in pols data and clean}
 pols_df = 
   read_csv("./data/fivethirtyeight_datasets/pols-month.csv") %>% 
   separate(mon, into = c("year", "month", "day")) %>% 
@@ -166,7 +166,7 @@ pols_df =
   select(year, month, president, gov_gop:rep_gop, gov_dem:rep_dem)
 ```
 
-```{r}
+```{read in snp data and clean}
 snp_df = 
   read_csv("./data/fivethirtyeight_datasets/snp.csv") %>% 
   separate(date, into = c("month", "day", "year")) %>% 
@@ -187,7 +187,7 @@ snp_df =
   select(year, month = "month_name", close)
 ```
 
-```{r}
+```{read in unemployment data and clean}
 unemployment_df = 
   read_csv("./data/fivethirtyeight_datasets/unemployment.csv") %>% 
   janitor::clean_names() %>% 
@@ -196,7 +196,9 @@ unemployment_df =
     jan:dec, 
     names_to = "month", 
     values_to = "percent_unemp"
-  )
+  ) %>% 
+  mutate(month = as.integer(month)
+         month = month.abb[month])
 ```
 
 
